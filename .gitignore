@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+
+# Abaqus generated/heavy files
+*.odb
+*.lck
+*.sta
+*.msg
+*.dat
+*.prt
+*.com
+*.sim
+*.log
+abaqus.rpy*
