@@ -10,9 +10,11 @@ qui est calculé, DEVIATIONS.md ce qui a changé et pourquoi, CHANGELOG.md les �
 | 11 août | contraintes principales, von Mises, Tresca, champ vectorisé | src, tests | faite, 10 tests |
 | 12 août | déformation, équilibre, Hooke, hypothèses planes, premier solveur EF 1D | src, tests | faite, 8 tests |
 | 13 août | Lamé, certification symbolique, plafond de pression, trois figures | src, tests, figures | faite, 8 tests |
-| 14 août | Kirsch, concentration de contraintes | | à venir |
+| 14 août | Kirsch, concentration, superposition, décroissance, trois figures | src, tests, figures | faite, 8 tests |
+| 15 août | thermoélasticité du cylindre | | à venir |
 | 10 septembre | analyse modale, ordre 2p, raideur centrifuge | seances/2026-09-10_analyse_modale | faite, 6 tests |
 
-Lancer : `pytest -q` à la racine exécute tous les tests (dossier tests/). Chaîne de Lamé,
-dans l'ordre arbitre, tests, figures :
-`python src/lame_symbolic.py && python -m pytest -q && python src/figures_lame.py`.
+Lancer : `pytest -q` à la racine exécute tous les tests (dossier tests/). Chaîne complète,
+dans l'ordre arbitres, tests, figures :
+`python src/lame_symbolic.py && python src/kirsch_symbolic.py && python -m pytest -q &&
+python src/figures_lame.py && python src/figures_kirsch.py`.

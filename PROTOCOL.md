@@ -42,7 +42,14 @@ sigma_rr = C1 - C2/r^2, sigma_tt = C1 + C2/r^2, C1 = p a^2/(b^2 - a^2), C2 = C1 
 sigma_zz = 2 nu C1 en déformations planes. Sur le composant sans perçage : sigma_tt(a) =
 33.33 MPa, sigma_vm(a) = 46.26 MPa, u_r(a) = 9.079e-3 mm, pression d'amorçage 108.07 MPa.
 Test de diagnostic gratuit : sigma_rr et sigma_tt ne doivent pas changer avec E (Michell).
-Kirsch (trou dans une plaque) et thermoélasticité du cylindre : jours 14 et 15.
+Kirsch, établi et certifié symboliquement le 14 août (cinq niveaux, fonction d'Airy
+comprise) : sigma_tt(a, theta) = sigma (1 - 2 cos 2 theta), K_t = 3 en uniaxial, 2 en
+équibiaxial, 4 en cisaillement pur ; indépendant du rayon du trou ; perturbation 2.2 % à
+cinq rayons, 1 % à 7.27 rayons. Domaine de calcul du perçage : domaine fini avec les
+tractions exactes de Kirsch appliquées au bord (option 2 de la partie 5), de sorte que
+l'erreur mesurée ne contienne que l'erreur numérique. Le perçage est une concentration,
+non une singularité : la convergence existe, plus lente qu'en champ lisse.
+Thermoélasticité du cylindre : jour 15.
 
 ## Jours et étiquettes
 Chaque séance close est étiquetée seance-AAAA-MM-JJ ; la liste est dans CHANGELOG.md.

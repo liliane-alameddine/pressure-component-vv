@@ -59,3 +59,57 @@ def yield_pressure(a, b, sigma_y, case="plane_strain", nu=0.3):
 def thin_wall_hoop(a, t, p):
     """Formule des chaudronniers, p a / t : écart de 5.2 % à t = a / 10, moins en dessous."""
     return p * a / t
+
+
+# ---------------------------------------------------------------------------------------
+# Séance du 14 août : solution de Kirsch, trou circulaire dans une plaque infinie
+# ---------------------------------------------------------------------------------------
+
+def kirsch_stresses(r, theta, a, sigma):
+    """Contraintes polaires autour d'un trou de rayon a sous traction uniaxiale sigma
+    dirigée selon theta = 0 ; bord du trou libre ; traction positive."""
+    r = np.asarray(r, dtype=float)
+    theta = np.asarray(theta, dtype=float)
+    ar2 = (a / r) ** 2
+    ar4 = ar2 ** 2
+    c2, s2 = np.cos(2.0 * theta), np.sin(2.0 * theta)
+    s_rr = 0.5 * sigma * (1.0 - ar2) + 0.5 * sigma * (1.0 - 4.0 * ar2 + 3.0 * ar4) * c2
+    s_tt = 0.5 * sigma * (1.0 + ar2) - 0.5 * sigma * (1.0 + 3.0 * ar4) * c2
+    s_rt = -0.5 * sigma * (1.0 + 2.0 * ar2 - 3.0 * ar4) * s2
+    return s_rr, s_tt, s_rt
+
+
+def kirsch_hole_hoop(theta, sigma):
+    """Contrainte circonférentielle sur le bord : sigma (1 - 2 cos 2 theta) ; 3 sigma à
+    90 degrés, - sigma dans l'axe de traction ; indépendante du rayon du trou."""
+    return sigma * (1.0 - 2.0 * np.cos(2.0 * np.asarray(theta, dtype=float)))
+
+
+def kirsch_hole_hoop_biaxial(theta, s1, s2):
+    """Superposition : tractions s1 selon theta = 0 et s2 selon theta = 90 degrés.
+    Équibiaxial (s1 = s2) : 2 s uniforme, K_t = 2 ; cisaillement pur (s2 = -s1) :
+    - 4 s1 cos 2 theta, K_t = 4."""
+    th = np.asarray(theta, dtype=float)
+    return s1 * (1.0 - 2.0 * np.cos(2.0 * th)) + s2 * (1.0 + 2.0 * np.cos(2.0 * th))
+
+
+def kirsch_decay(r_over_a):
+    """sigma_tt / sigma le long de theta = 90 degrés : 1 + a^2/(2 r^2) + 3 a^4/(2 r^4)."""
+    x = np.asarray(r_over_a, dtype=float)
+    return 1.0 + 0.5 / x**2 + 1.5 / x**4
+
+
+def ellipse_kt(a, rho):
+    """Facteur de concentration approché d'une entaille elliptique, 1 + 2 sqrt(a / rho) ;
+    diverge quand rho tend vers zéro : la fissure n'a pas de K_t."""
+    return 1.0 + 2.0 * np.sqrt(a / rho)
+
+
+def polar_to_cartesian(s_rr, s_tt, s_rt, theta):
+    """Rotation des composantes polaires vers le repère cartésien : la comparaison avec
+    un code éléments finis passe par elle."""
+    c, s = np.cos(theta), np.sin(theta)
+    s_xx = s_rr * c**2 + s_tt * s**2 - 2.0 * s_rt * s * c
+    s_yy = s_rr * s**2 + s_tt * c**2 + 2.0 * s_rt * s * c
+    s_xy = (s_rr - s_tt) * s * c + s_rt * (c**2 - s**2)
+    return s_xx, s_yy, s_xy
