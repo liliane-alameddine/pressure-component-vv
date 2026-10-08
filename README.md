@@ -12,6 +12,11 @@ qui est calculé, DEVIATIONS.md ce qui a changé et pourquoi, CHANGELOG.md les �
 | 13 août | Lamé, certification symbolique, plafond de pression, trois figures | src, tests, figures | faite, 8 tests |
 | 14 août | Kirsch, concentration, superposition, décroissance, trois figures | src, tests, figures | faite, 8 tests |
 | 15 août | thermoélasticité, axial libre, fenêtre de soulagement, choc thermique | src, tests, figures | faite, 10 tests ; étape 1 close |
+| 16 août | consolidation de la semaine 1 | | à venir |
+| 14 à 16 octobre | étape 9 : substitut par chaos polynomial, propagation, optimisation robuste | | à venir |
+| après le 16 octobre | étape 9 bis : méta-modèle par réseau de neurones, comparé au chaos polynomial | | à venir, ajoutée le 29 septembre |
+| fin août, après le perçage | étape global/local : sous-modèle du perçage piloté par le modèle global, erreur selon la distance de coupe | | à venir, ajoutée le 8 octobre |
+| 13 octobre | fissures radiales dans le sous-modèle, facteur d'intensité des contraintes | | à venir |
 | 10 septembre | analyse modale, ordre 2p, raideur centrifuge | seances/2026-09-10_analyse_modale | faite, 6 tests |
 
 Lancer : `pytest -q` à la racine exécute tous les tests (dossier tests/). Chaîne complète,

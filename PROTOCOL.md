@@ -77,6 +77,26 @@ global est déjà convergé ; sinon l'erreur du global passe dans le local.
 Ouverture : fissures radiales à l'alésage et au perçage (séance du 13 octobre), traitées
 dans le sous-modèle, qui est l'endroit où la rupture se calcule dans l'industrie.
 
+## Méta-modèles (étapes 9 et 9 bis)
+Étape 9 : chaos polynomial ajusté sur la campagne paramétrique, degré borné par le nombre
+de niveaux du plan, validé sur des calculs complets retenus hors grille (Q2 de validation).
+Étape 9 bis, ajoutée le 29 septembre : réseau de neurones entraîné sur la même campagne,
+jugé par la même règle sur les mêmes cas retenus ; courbe de précision en fonction du
+nombre de calculs d'entraînement ; comparaison au chaos polynomial en précision, en coût
+et en extrapolation. Un méta-modèle n'est jamais appelé validé sans cas retenus.
+
+## Méthode global/local (étape ajoutée le 8 octobre)
+Modèle global : composant complet maillé grossièrement autour du perçage. Sous-modèle :
+disque autour du perçage, maillé finement, piloté par les déplacements du modèle global
+interpolés sur sa frontière de coupe. Arbitre : calcul fin complet du composant, et
+Kirsch pour la partie mécanique. Mesures : erreur du sous-modèle en fonction de la
+distance de coupe (2, 3, 5 rayons), confrontée à la décroissance de Kirsch (2.2 % à cinq
+rayons) ; variante pilotée en tractions comparée à la variante en déplacements ; gain de
+coût par rapport au calcul fin complet. Règle : la coupe doit se trouver là où le champ
+global est déjà convergé ; sinon l'erreur du global passe dans le local.
+Ouverture : fissures radiales à l'alésage et au perçage (séance du 13 octobre), traitées
+dans le sous-modèle, qui est l'endroit où la rupture se calcule dans l'industrie.
+
 ## Limites déclarées
 Régime thermique permanent seulement ; le cas dimensionnant réel d'une paroi sous
 pression est le refroidissement brutal de l'intérieur (choc thermique sous pression), où
