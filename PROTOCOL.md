@@ -65,6 +65,22 @@ jugé par la même règle sur les mêmes cas retenus ; courbe de précision en f
 nombre de calculs d'entraînement ; comparaison au chaos polynomial en précision, en coût
 et en extrapolation. Un méta-modèle n'est jamais appelé validé sans cas retenus.
 
+## Gel du 16 août : recoupement, espace paramétrique, échecs
+Recoupement croisé : Lamé (b = 1e7 a, p_o = - sigma) et Kirsch équibiaxial coïncident sur
+le champ entier, de a à 20 a, à 2e-10 MPa près ; à b fini l'écart vaut a^2/(b^2 - a^2).
+Espace paramétrique : huit grandeurs dimensionnelles (a, b, c, E, nu, alpha, p, dT),
+quatre groupes indépendants b/a, c/a, nu, Theta. Theta = E alpha dT / ((1 - nu) p) pour
+les champs ; pour la pression d'amorçage, Theta_y = E alpha dT / ((1 - nu) sigma_y), car
+Theta contient p. Résultat : p_y / sigma_y = F(b/a, c/a, nu, Theta_y), c/a n'intervenant
+que par le calcul éléments finis du perçage. Composant : Theta_y = 0.72.
+Grandeur de convergence : jamais une grandeur qu'une propriété du problème rend exacte
+(déplacement nodal en 1D, contrainte au milieu d'élément) ; en 2D, contrainte au point le
+plus sollicité et normes intégrales.
+Ce qui constituerait un échec : contrainte dépendant de E en chargement mécanique pur
+(théorème de Michell) ; ordre observé très éloigné de l'ordre théorique ; trace sigma_rr
++ sigma_tt non constante en chargement mécanique pur ; désaccord avec un arbitre au-delà
+du seuil fixé avant le calcul.
+
 ## Méthode global/local (étape ajoutée le 8 octobre)
 Modèle global : composant complet maillé grossièrement autour du perçage. Sous-modèle :
 disque autour du perçage, maillé finement, piloté par les déplacements du modèle global
@@ -84,6 +100,22 @@ de niveaux du plan, validé sur des calculs complets retenus hors grille (Q2 de 
 jugé par la même règle sur les mêmes cas retenus ; courbe de précision en fonction du
 nombre de calculs d'entraînement ; comparaison au chaos polynomial en précision, en coût
 et en extrapolation. Un méta-modèle n'est jamais appelé validé sans cas retenus.
+
+## Gel du 16 août : recoupement, espace paramétrique, échecs
+Recoupement croisé : Lamé (b = 1e7 a, p_o = - sigma) et Kirsch équibiaxial coïncident sur
+le champ entier, de a à 20 a, à 2e-10 MPa près ; à b fini l'écart vaut a^2/(b^2 - a^2).
+Espace paramétrique : huit grandeurs dimensionnelles (a, b, c, E, nu, alpha, p, dT),
+quatre groupes indépendants b/a, c/a, nu, Theta. Theta = E alpha dT / ((1 - nu) p) pour
+les champs ; pour la pression d'amorçage, Theta_y = E alpha dT / ((1 - nu) sigma_y), car
+Theta contient p. Résultat : p_y / sigma_y = F(b/a, c/a, nu, Theta_y), c/a n'intervenant
+que par le calcul éléments finis du perçage. Composant : Theta_y = 0.72.
+Grandeur de convergence : jamais une grandeur qu'une propriété du problème rend exacte
+(déplacement nodal en 1D, contrainte au milieu d'élément) ; en 2D, contrainte au point le
+plus sollicité et normes intégrales.
+Ce qui constituerait un échec : contrainte dépendant de E en chargement mécanique pur
+(théorème de Michell) ; ordre observé très éloigné de l'ordre théorique ; trace sigma_rr
++ sigma_tt non constante en chargement mécanique pur ; désaccord avec un arbitre au-delà
+du seuil fixé avant le calcul.
 
 ## Méthode global/local (étape ajoutée le 8 octobre)
 Modèle global : composant complet maillé grossièrement autour du perçage. Sous-modèle :
