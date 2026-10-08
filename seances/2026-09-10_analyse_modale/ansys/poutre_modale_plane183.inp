@@ -1,0 +1,39 @@
+! Séance du 10 septembre, vérification croisée ANSYS Mechanical APDL.
+! Poutre encastrée-libre 1000 x 50 mm, épaisseur 1 mm, acier, contraintes planes,
+! PLANE183 (Q8), maillage 40 x 2 identique au calcul Python. Modal, 6 modes, Block Lanczos.
+! Lancer : /INPUT depuis APDL, ou Read Input From... Lire les fréquences dans *GET / SET,LIST.
+/CLEAR
+/PREP7
+ET,1,PLANE183
+KEYOPT,1,3,3          ! contraintes planes avec épaisseur
+R,1,1.0               ! épaisseur 1 mm
+MP,EX,1,210000
+MP,PRXY,1,0.30
+MP,DENS,1,7.85E-9     ! tonne/mm^3, cohérent avec mm, N, MPa
+RECTNG,0,1000,-25,25
+LESIZE,ALL,,,2        ! 2 éléments sur les côtés verticaux
+LSEL,S,LOC,Y,-25
+LSEL,A,LOC,Y,25
+LESIZE,ALL,,,40       ! 40 éléments dans la longueur
+LSEL,ALL
+MSHKEY,1
+AMESH,ALL
+NSEL,S,LOC,X,0
+D,ALL,ALL,0           ! encastrement du bord gauche
+NSEL,ALL
+FINISH
+/SOLU
+ANTYPE,MODAL
+MODOPT,LANB,6
+MXPAND,6
+LUMPM,OFF             ! masse cohérente ; LUMPM,ON pour l'encadrement par la masse concentrée
+SOLVE
+FINISH
+/POST1
+SET,LIST
+! Attendu, Python Q8 à intégration 2x2 comme PLANE183 (maillage 40 x 2, masse cohérente) :
+!   41.734  258.595  711.447  1293.970 (mode axial)  1360.610  2183.875 Hz
+! Python Q8 à intégration 3x3 : 41.739  258.625  711.548  1293.997  1360.861  2184.419 Hz
+! L'écart entre les deux intégrations, 0.01 à 0.03 %, est celui de la règle de quadrature
+! de la rigidité ; un écart ANSYS / Python au-delà de 0.05 % signale une différence de
+! modèle (épaisseur, densité, contrainte plane, conditions d'encastrement).

@@ -1,0 +1,9 @@
+cas,nx,ny,ndof,f1_Hz,erreur_Hz
+encastree-libre,10,1,106,41.940757,2.232e-01
+encastree-libre,20,2,330,41.766321,4.872e-02
+encastree-libre,40,4,1138,41.730895,1.329e-02
+encastree-libre,80,8,4194,41.721231,3.625e-03
+libre-libre,10,1,106,263.953648,4.740e-01
+libre-libre,20,2,330,263.513675,3.400e-02
+libre-libre,40,4,1138,263.481871,2.195e-03
+libre-libre,80,8,4194,263.479818,1.418e-04
