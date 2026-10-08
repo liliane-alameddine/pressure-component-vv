@@ -57,7 +57,7 @@ def yield_pressure(a, b, sigma_y, case="plane_strain", nu=0.3):
 
 
 def thin_wall_hoop(a, t, p):
-    """Formule des chaudronniers, p a / t : écart de 5.2 % à t = a / 10, moins en dessous."""
+    """Formule des chaudronniers, p a / t, valable à 5 % près pour t < a / 10."""
     return p * a / t
 
 
@@ -113,3 +113,78 @@ def polar_to_cartesian(s_rr, s_tt, s_rt, theta):
     s_yy = s_rr * s**2 + s_tt * c**2 + 2.0 * s_rt * s * c
     s_xy = (s_rr - s_tt) * s * c + s_rt * (c**2 - s**2)
     return s_xx, s_yy, s_xy
+
+
+# ---------------------------------------------------------------------------------------
+# Séance du 15 août : champ thermique permanent et contraintes thermiques du cylindre
+# delta_T_0 = T_a - T_b, positif si l'intérieur est plus chaud ; traction positive.
+# ---------------------------------------------------------------------------------------
+
+def blocking_stress(E, nu, alpha, dT, n_blocked):
+    """Contrainte d'un corps chauffé bloqué dans 1, 2 ou 3 directions :
+    - E alpha dT, - E alpha dT / (1 - nu), - E alpha dT / (1 - 2 nu)."""
+    factor = {1: 1.0, 2: 1.0 / (1.0 - nu), 3: 1.0 / (1.0 - 2.0 * nu)}[n_blocked]
+    return -E * alpha * dT * factor
+
+
+def temperature_field(r, a, b, T_a, T_b):
+    """Profil permanent logarithmique : T_b + (T_a - T_b) ln(b/r) / ln(b/a)."""
+    r = np.asarray(r, dtype=float)
+    return T_b + (T_a - T_b) * np.log(b / r) / np.log(b / a)
+
+
+def heat_flux(r, a, b, T_a, T_b, k):
+    """Flux radial k (T_a - T_b) / (r ln(b/a)) ; le produit flux fois r est constant."""
+    r = np.asarray(r, dtype=float)
+    return k * (T_a - T_b) / (r * np.log(b / a))
+
+
+def thermal_stresses(r, a, b, T_a, T_b, E, nu, alpha):
+    """Contraintes thermiques radiale et circonférentielle en déformations planes ;
+    autocontrainte, les deux surfaces sont libres d'effort."""
+    r = np.asarray(r, dtype=float)
+    K = E * alpha * (T_a - T_b) / (2.0 * (1.0 - nu) * np.log(b / a))
+    C = (a**2 / (b**2 - a**2)) * np.log(b / a)
+    s_rr = K * (-np.log(b / r) + C * (b**2 / r**2 - 1.0))
+    s_tt = K * (1.0 - np.log(b / r) - C * (b**2 / r**2 + 1.0))
+    return s_rr, s_tt
+
+
+def thermal_axial(r, a, b, T_a, T_b, E, nu, alpha, T_ref):
+    """Contrainte axiale en déformations planes : nu (s_rr + s_tt) - E alpha (T - T_ref) ;
+    varie dans l'épaisseur, contrairement au cas de Lamé."""
+    s_rr, s_tt = thermal_stresses(r, a, b, T_a, T_b, E, nu, alpha)
+    dT = temperature_field(r, a, b, T_a, T_b) - T_ref
+    return nu * (s_rr + s_tt) - E * alpha * dT
+
+
+def combined_stresses(r, a, b, p, T_a, T_b, E, nu, alpha, T_ref=None):
+    """Superposition pression plus thermique, licite par linéarité et couplage faible.
+    Axial de pression en déformations planes (12 août) ; axial thermique libre, sans
+    résultante (protocole du 15 août), sauf si T_ref est donné : alors déformations
+    planes pures, dépendantes de T_ref."""
+    pr = lame_stresses(r, a, b, p)
+    th = thermal_stresses(r, a, b, T_a, T_b, E, nu, alpha)
+    s_rr, s_tt = pr[0] + th[0], pr[1] + th[1]
+    s_zz_th = (thermal_axial_free(r, a, b, T_a, T_b, E, nu, alpha) if T_ref is None
+               else thermal_axial(r, a, b, T_a, T_b, E, nu, alpha, T_ref))
+    s_zz = lame_axial(r, a, b, p, case="plane_strain", nu=nu) + s_zz_th
+    return s_rr, s_tt, s_zz
+
+
+def thermal_shock_parameter(sigma_f, E, nu, alpha):
+    """Écart de température admissible R = sigma_f (1 - nu) / (E alpha)."""
+    return sigma_f * (1.0 - nu) / (E * alpha)
+
+
+def thermal_axial_free(r, a, b, T_a, T_b, E, nu, alpha):
+    """Contrainte axiale thermique d'un cylindre libre axialement (déformation plane
+    généralisée) : on superpose à la solution en déformations planes une contrainte
+    uniforme qui annule la résultante axiale ; le résultat ne dépend plus de T_ref."""
+    r = np.asarray(r, dtype=float)
+    rr = np.linspace(a, b, 4001)
+    s_rr, s_tt = thermal_stresses(rr, a, b, T_a, T_b, E, nu, alpha)
+    zz = nu * (s_rr + s_tt) - E * alpha * temperature_field(rr, a, b, T_a, T_b)
+    c0 = -np.trapezoid(zz * rr, rr) / np.trapezoid(rr, rr)
+    s_rr, s_tt = thermal_stresses(r, a, b, T_a, T_b, E, nu, alpha)
+    return nu * (s_rr + s_tt) - E * alpha * temperature_field(r, a, b, T_a, T_b) + c0

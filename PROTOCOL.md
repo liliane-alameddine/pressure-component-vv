@@ -6,8 +6,8 @@ chaque campagne et n'est modifié qu'avec une ligne datée dans DEVIATIONS.md.
 ## Composant
 Cylindre épais, rayon intérieur a = 50 mm, rayon extérieur b = 100 mm, percé d'un trou
 circulaire de rayon c = 5 mm, d'axe parallèle à l'axe du cylindre, centré à r = 75 mm
-(mi-épaisseur). Chargement : pression interne p = 20 MPa sur l'alésage ; gradient thermique
-radial (à préciser au jour de la thermique). Hypothèse cinématique : déformations planes (cylindre long, sections axiales empêchées),
+(mi-épaisseur). Chargement : pression interne p = 20 MPa sur l'alésage ; gradient thermique radial
+permanent, écart T_a - T_b en paramètre (0 à 50 K), intérieur chaud. Hypothèse cinématique : déformations planes (cylindre long, sections axiales empêchées),
 condition d'extrémité du cas 3 : eps_zz = 0, sigma_zz = nu (sigma_rr + sigma_thth), soit
 2 nu p a^2 / (b^2 - a^2) uniforme ; les cas ouvert et fermé sont écartés, voir 12 août.
 Petites perturbations : ni grande rotation ni grand déplacement pour ce composant.
@@ -49,7 +49,38 @@ cinq rayons, 1 % à 7.27 rayons. Domaine de calcul du perçage : domaine fini av
 tractions exactes de Kirsch appliquées au bord (option 2 de la partie 5), de sorte que
 l'erreur mesurée ne contienne que l'erreur numérique. Le perçage est une concentration,
 non une singularité : la convergence existe, plus lente qu'en champ lisse.
-Thermoélasticité du cylindre : jour 15.
+Thermoélasticité du cylindre, établie et certifiée le 15 août (six niveaux) : T(r)
+logarithmique ; sigma_rr et sigma_tt thermiques autoéquilibrées, bords libres,
+indépendantes de la taille ; intérieur chaud comprimé en régime permanent. Axial
+thermique : cylindre libre axialement, sigma_zz = sigma_rr + sigma_tt, résultante nulle,
+indépendant de toute température de référence ; l'axial de pression reste en
+déformations planes. Superposition par linéarité et couplage faible (thermique puis
+mécanique). Trois arbitres exacts : l'étape 1 est close.
+
+## Méta-modèles (étapes 9 et 9 bis)
+Étape 9 : chaos polynomial ajusté sur la campagne paramétrique, degré borné par le nombre
+de niveaux du plan, validé sur des calculs complets retenus hors grille (Q2 de validation).
+Étape 9 bis, ajoutée le 29 septembre : réseau de neurones entraîné sur la même campagne,
+jugé par la même règle sur les mêmes cas retenus ; courbe de précision en fonction du
+nombre de calculs d'entraînement ; comparaison au chaos polynomial en précision, en coût
+et en extrapolation. Un méta-modèle n'est jamais appelé validé sans cas retenus.
+
+## Méthode global/local (étape ajoutée le 8 octobre)
+Modèle global : composant complet maillé grossièrement autour du perçage. Sous-modèle :
+disque autour du perçage, maillé finement, piloté par les déplacements du modèle global
+interpolés sur sa frontière de coupe. Arbitre : calcul fin complet du composant, et
+Kirsch pour la partie mécanique. Mesures : erreur du sous-modèle en fonction de la
+distance de coupe (2, 3, 5 rayons), confrontée à la décroissance de Kirsch (2.2 % à cinq
+rayons) ; variante pilotée en tractions comparée à la variante en déplacements ; gain de
+coût par rapport au calcul fin complet. Règle : la coupe doit se trouver là où le champ
+global est déjà convergé ; sinon l'erreur du global passe dans le local.
+Ouverture : fissures radiales à l'alésage et au perçage (séance du 13 octobre), traitées
+dans le sous-modèle, qui est l'endroit où la rupture se calcule dans l'industrie.
+
+## Limites déclarées
+Régime thermique permanent seulement ; le cas dimensionnant réel d'une paroi sous
+pression est le refroidissement brutal de l'intérieur (choc thermique sous pression), où
+la paroi intérieure passe en traction ; il n'est pas traité.
 
 ## Jours et étiquettes
 Chaque séance close est étiquetée seance-AAAA-MM-JJ ; la liste est dans CHANGELOG.md.
