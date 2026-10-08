@@ -26,6 +26,19 @@ Conditions essentielles imposées par élimination (partition libre / imposé) ;
 réactions se lisent par R = K U - F. Pénalisation et multiplicateurs de Lagrange sont
 implémentés dans src/fem1d.py à titre de comparaison.
 
+## Discrétisation (gel du 18 août)
+Fonctions de forme nodales, partition de l'unité, complètes au degré de l'élément (test du
+patch). Formulation isoparamétrique : géométrie et champ interpolés par les mêmes fonctions ;
+jacobien strictement positif exigé, noeud médian d'une arête courbe dans le tiers central (le
+quart central est la limite exacte en 1D). Quadrature de Gauss-Legendre au nombre de points
+minimal qui intègre exactement l'intégrande de la rigidité (2 p - 2 à jacobien constant) ;
+l'intégration réduite n'est admise que contre un verrouillage, avec contrôle des modes
+parasites par la condition de rang n_gauss n_def >= n_ddl - n_rigides. Charges réparties par
+le vecteur cohérent (1/6, 2/3, 1/6 sur l'élément quadratique). Contraintes lues aux points de
+Barlow (points de Gauss d'ordre p), jamais aux noeuds extrapolés ; le saut inter-éléments
+est l'indicateur d'erreur. Conditionnement en 4 n^2 / pi^2 : un chiffre significatif perdu
+par log10 du conditionnement.
+
 ## Critère d'amorçage de la plastification
 Critère de von Mises : le matériau est un acier, métal dont la plastification procède du
 glissement des dislocations et est insensible à la pression hydrostatique (11 août).

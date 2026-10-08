@@ -12,6 +12,7 @@ qui est calculé, DEVIATIONS.md ce qui a changé et pourquoi, CHANGELOG.md les �
 | 13 août | Lamé, certification symbolique, plafond de pression, trois figures | src, tests, figures | faite, 8 tests |
 | 14 août | Kirsch, concentration, superposition, décroissance, trois figures | src, tests, figures | faite, 8 tests |
 | 15 août | thermoélasticité, axial libre, fenêtre de soulagement, choc thermique | src, tests, figures | faite, 10 tests ; étape 1 close |
+| 18 août | fonctions de forme, isoparamétrique, Gauss, recoupement des trois voies, Barlow, rang, conditionnement | src, tests, seances/2026-08-18_discretisation | faite, 7 tests |
 | 16 août | recoupement Lamé/Kirsch, adimensionnement, fenêtre d'amorçage, convergence en norme, protocole gelé | src, tests, seances/2026-08-16_consolidation | faite, 7 tests |
 | 14 à 16 octobre | étape 9 : substitut par chaos polynomial, propagation, optimisation robuste | | à venir |
 | après le 16 octobre | étape 9 bis : méta-modèle par réseau de neurones, comparé au chaos polynomial | | à venir, ajoutée le 29 septembre |

@@ -5,3 +5,4 @@ seance-2026-08-13   Lamé : module analytique, certification symbolique à trois
 seance-2026-08-14   Kirsch : module, certification à cinq niveaux, superposition, décroissance, trois figures, 8 tests
 seance-2026-08-15   thermique : champ logarithmique, contraintes, axial libre, fenêtre de soulagement, choc, quatre figures, 10 tests ; étape 1 close
 seance-2026-08-16   recoupement croisé sur le champ entier, quatre groupes, Theta_y, fenêtre d'amorçage, normes L2 et énergie ordres 2 et 1, protocole gelé, 7 tests
+seance-2026-08-18   isoparamétrique : trois exigences, recoupement des trois voies, charge quadratique 1/6 2/3 1/6, Barlow, suffisance de rang, kappa = 4 n^2 / pi^2, 7 tests
